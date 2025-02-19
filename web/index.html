@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Clínica</title>
+    <style>
+        body {
+            display: flex;
+        }
+        .form-container {
+            width: 50%;
+            padding: 20px;
+        }
+        .table-container {
+            width: 50%;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Provisório</h1>
+    </header>
+    <main>
+        <div class="form-container">
+            <section>
+                <form>
+                    <h2>Agendar consulta</h2>
+                    <input type="text" id="paciente" name="paciente" placeholder="Nome do paciente" required>
+                    
+                    <input type="text" id="medico" name="medico" placeholder="Nome do médico" required>
+
+                    <input type="date" id="data" name="data" required>
+                    
+                    <label for="hora">Hora</label>
+                    <input type="time" id="hora" name="hora" required>
+
+                    <button ype="submit">Agendar</button>
+                </form>
+            </section>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Paciente</th>
+                        <th>Médico</th>
+                        <th>Data/Hora</th>
+                        <th>Alterar</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Maria Mello</td>
+                        <td>Jacinto Souza</td>
+                        <td>13/02/2025</td>
+                        <td><button>*</button></td>
+                        <td><button>-</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Ana Silva Sauro</td>
+                        <td>Ursula Filho Silva</td>
+                        <td>21/12/2001</td>
+                        <td><button>*</button></td>
+                        <td><button>-</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <h2>Mensagens</h2>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+     
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', event => {
+                    const id = event.target.getAttribute('data-id');
+                    alert(`Edit item with ID: ${id}`);
+  
+                });
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', event => {
+                    const id = event.target.getAttribute('data-id');
+                    alert(`Delete item with ID: ${id}`);
+  
+                });
+            });
+        });
+    </script>
+</body>
+<script src="index.js"></script>
+
+</html>
+
+
+
+
