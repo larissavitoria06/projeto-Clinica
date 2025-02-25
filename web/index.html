@@ -10,10 +10,12 @@
         body {
             display: flex;
         }
+
         .form-container {
             width: 50%;
             padding: 20px;
         }
+
         .table-container {
             width: 50%;
             padding: 20px;
@@ -28,18 +30,14 @@
     <main>
         <div class="form-container">
             <section>
-                <form>
+                <form id="form-agendar">
                     <h2>Agendar consulta</h2>
                     <input type="text" id="paciente" name="paciente" placeholder="Nome do paciente" required>
-                    
                     <input type="text" id="medico" name="medico" placeholder="Nome do médico" required>
-
                     <input type="date" id="data" name="data" required>
-                    
                     <label for="hora">Hora</label>
                     <input type="time" id="hora" name="hora" required>
-
-                    <button ype="submit">Agendar</button>
+                    <button type="submit">Agendar</button>
                 </form>
             </section>
         </div>
@@ -55,55 +53,106 @@
                         <th>Excluir</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody id="consulta-lista">
+                    <tr data-id="1">
                         <td>1</td>
                         <td>Maria Mello</td>
                         <td>Jacinto Souza</td>
-                        <td>13/02/2025</td>
-                        <td><button>*</button></td>
-                        <td><button>-</button></td>
+                        <td>13/02/2025 10:00</td>
+                        <td><button class="edit-btn" data-id="1">Alterar</button></td>
+                        <td><button class="delete-btn" data-id="1">Excluir</button></td>
                     </tr>
-                    <tr>
+                    <tr data-id="2">
                         <td>2</td>
                         <td>Ana Silva Sauro</td>
                         <td>Ursula Filho Silva</td>
-                        <td>21/12/2001</td>
-                        <td><button>*</button></td>
-                        <td><button>-</button></td>
+                        <td>21/12/2001 14:00</td>
+                        <td><button class="edit-btn" data-id="2">Alterar</button></td>
+                        <td><button class="delete-btn" data-id="2">Excluir</button></td>
                     </tr>
                 </tbody>
             </table>
-        </section>
+        </div>
     </main>
     <footer>
         <h2>Mensagens</h2>
     </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-     
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', event => {
-                    const id = event.target.getAttribute('data-id');
-                    alert(`Edit item with ID: ${id}`);
-  
-                });
-            });
+            let consultaIdAtual = null;
 
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', event => {
-                    const id = event.target.getAttribute('data-id');
-                    alert(`Delete item with ID: ${id}`);
-  
+            function adicionarEventosBotoes() {
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', event => {
+                        const id = event.target.getAttribute('data-id');
+                        consultaIdAtual = id;
+
+                        const tr = document.querySelector(`tr[data-id='${id}']`);
+                        const paciente = tr.children[1].textContent;
+                        const medico = tr.children[2].textContent;
+                        const [data, hora] = tr.children[3].textContent.split(' ');
+
+                        document.getElementById('paciente').value = paciente;
+                        document.getElementById('medico').value = medico;
+                        document.getElementById('data').value = data;
+                        document.getElementById('hora').value = hora;
+                    });
                 });
+
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', event => {
+                        const id = event.target.getAttribute('data-id');
+                        if (confirm(`Tem certeza que deseja excluir o item com ID: ${id}?`)) {
+                            const tr = document.querySelector(`tr[data-id='${id}']`);
+                            tr.remove();
+                        }
+                    });
+                });
+            }
+
+            adicionarEventosBotoes();
+
+            document.getElementById('form-agendar').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const paciente = document.getElementById('paciente').value;
+                const medico = document.getElementById('medico').value;
+                const data = document.getElementById('data').value;
+                const hora = document.getElementById('hora').value;
+
+                if (consultaIdAtual) {
+                    const tr = document.querySelector(`tr[data-id='${consultaIdAtual}']`);
+                    tr.children[1].textContent = paciente;
+                    tr.children[2].textContent = medico;
+                    tr.children[3].textContent = `${data} ${hora}`;
+
+                    consultaIdAtual = null;
+                } else {
+
+                    const novoId = Date.now();
+                    
+                    const novaConsulta = `
+                        <tr data-id="${novoId}">
+                            <td>${novoId}</td>
+                            <td>${paciente}</td>
+                            <td>${medico}</td>
+                            <td>${data} ${hora}</td>
+                            <td><button class="edit-btn" data-id="${novoId}">Alterar</button></td>
+                            <td><button class="delete-btn" data-id="${novoId}">Excluir</button></td>
+                        </tr>
+                    `;
+                
+                    document.getElementById('consulta-lista').insertAdjacentHTML('beforeend', novaConsulta);
+
+                
+                    adicionarEventosBotoes();
+                }
+
+                document.getElementById('form-agendar').reset();
             });
         });
     </script>
+
 </body>
-<script src="index.js"></script>
 
 </html>
-
-
-
-
